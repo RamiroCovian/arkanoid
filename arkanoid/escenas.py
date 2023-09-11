@@ -1,4 +1,6 @@
+import os
 import pygame as pg
+from . import ANCHO, ALTO, LOGO_PATH
 
 
 class Escena:
@@ -16,6 +18,10 @@ class Escena:
 class Portada(Escena):
     def __init__(self, pantalla):
         super().__init__(pantalla)
+        # windows: resources\images\arkanoid_name.png
+        # mac/linux: resources/images/arkanoid_name.png
+        # ruta = os.path.join("resources", "images", "arkanoid_name.png")
+        self.logo = pg.image.load(LOGO_PATH)
 
     def bucle_principal(self):
         super().bucle_principal()
@@ -25,7 +31,14 @@ class Portada(Escena):
                 if evento.type == pg.QUIT:
                     salir = True
             self.pantalla.fill((99, 0, 0))
+            self.pintar_logo()
             pg.display.flip()
+
+    def pintar_logo(self):
+        ancho, alto = self.logo.get_size()
+        pos_x = (ANCHO - ancho) / 2
+        pos_y = (ALTO - alto) / 2
+        self.pantalla.blit(self.logo, (pos_x, pos_y))
 
 
 class Partida(Escena):

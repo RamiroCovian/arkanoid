@@ -6,7 +6,7 @@ from .escenas import MejoresJugadores, Partida, Portada
 class Arkanoid:
     def __init__(self):
         pg.init()
-        self.pantalla = pg.display.set_mode((ALTO, ANCHO))
+        self.pantalla = pg.display.set_mode((ANCHO, ALTO))
         self.reloj = pg.time.Clock()
         self.title = pg.display.set_caption("Arkanoid")
         portada = Portada(self.pantalla)
