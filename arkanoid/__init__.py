@@ -1,7 +1,7 @@
 import os
 
-ALTO = 800
-ANCHO = 600
+ALTO = 780
+ANCHO = 670
 FPS = 60
 
 COLOR_FONDO = (99, 99, 99)
