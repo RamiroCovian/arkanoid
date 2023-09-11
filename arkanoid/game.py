@@ -1,5 +1,6 @@
 import pygame as pg
 from . import ANCHO, ALTO, COLOR_FONDO
+from .escenas import MejoresJugadores, Partida, Portada
 
 
 class Arkanoid:
@@ -8,21 +9,14 @@ class Arkanoid:
         self.pantalla = pg.display.set_mode((ALTO, ANCHO))
         self.reloj = pg.time.Clock()
         self.title = pg.display.set_caption("Arkanoid")
+        portada = Portada(self.pantalla)
+        partida = Partida(self.pantalla)
+        mejores_jugadores = MejoresJugadores(self.pantalla)
+        self.escenas = [portada, partida, mejores_jugadores]
 
     def jugar(self):
-        """
-        Bucle principal
-        """
-        salir = False
-        while not salir:
-            # 1. Capturar los eventos
-            for evento in pg.event.get():
-                if pg.QUIT == evento.type:
-                    salir = True
-            # 2. Calcular estados de elementos y pintarlos
-            self.pantalla.fill(COLOR_FONDO)
-            # 3. Mostrar los cambios (pintados) y controlar el reloj
-            pg.display.flip()
+        for escena in self.escenas:
+            escena.bucle_principal()
 
         pg.quit()
 
