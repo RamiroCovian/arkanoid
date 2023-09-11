@@ -1,5 +1,5 @@
 import pygame as pg
-from . import ANCHO, ALTO, COLOR_FONDO
+from . import ANCHO, ALTO
 from .escenas import MejoresJugadores, Partida, Portada
 
 

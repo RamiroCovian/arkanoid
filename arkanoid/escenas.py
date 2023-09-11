@@ -31,7 +31,9 @@ class Portada(Escena):
         salir = False
         while not salir:
             for evento in pg.event.get():
-                if evento.type == pg.QUIT:
+                if evento.type == pg.QUIT or (
+                    evento.type == pg.KEYUP and evento.key == pg.K_SPACE
+                ):
                     salir = True
             self.pantalla.fill((99, 0, 0))
             self.pintar_logo()
