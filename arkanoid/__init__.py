@@ -1,0 +1,5 @@
+ALTO = 800
+ANCHO = 600
+FPS = 60
+
+COLOR_FONDO = (99, 0, 0)
