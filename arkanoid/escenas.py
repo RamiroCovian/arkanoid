@@ -56,6 +56,11 @@ class Portada(Escena):
 
 
 class Partida(Escena):
+    def __init__(self, pantalla):
+        super().__init__(pantalla)
+        path_fondo = os.path.join("resources", "images", "background.jpg")
+        self.fondo = pg.image.load(path_fondo)
+
     def bucle_principal(self):
         super().bucle_principal()
         salir = False
@@ -63,8 +68,16 @@ class Partida(Escena):
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     return True
-            self.pantalla.fill((0, 99, 0))
+            self.pintar_fondo()
             pg.display.flip()
+
+    def pintar_fondo(self):
+        # TODO: mejorar la logica para "rellenar" el fondo.
+        self.pantalla.fill((0, 0, 99))
+        self.pantalla.blit(self.fondo, (0, 0))
+        self.pantalla.blit(self.fondo, (600, 0))
+        self.pantalla.blit(self.fondo, (0, 800))
+        self.pantalla.blit(self.fondo, (600, 800))
 
 
 class MejoresJugadores(Escena):
@@ -75,5 +88,5 @@ class MejoresJugadores(Escena):
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     return True
-            self.pantalla.fill((0, 0, 99))
+            self.pantalla.fill((0, 99, 0))
             pg.display.flip()
