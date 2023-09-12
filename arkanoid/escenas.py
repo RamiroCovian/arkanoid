@@ -1,11 +1,13 @@
 import os
 import pygame as pg
-from . import ANCHO, ALTO, LOGO_PATH
+from . import ANCHO, ALTO, LOGO_PATH, FPS
+from .entidades import Raqueta
 
 
 class Escena:
     def __init__(self, pantalla):
         self.pantalla = pantalla
+        self.reloj = pg.time.Clock()
 
     def bucle_principal(self):  # deberia ser un verbo por ser un metodo
         """
@@ -60,15 +62,19 @@ class Partida(Escena):
         super().__init__(pantalla)
         path_fondo = os.path.join("resources", "images", "background.jpg")
         self.fondo = pg.image.load(path_fondo)
+        self.jugador = Raqueta()
 
     def bucle_principal(self):
         super().bucle_principal()
         salir = False
         while not salir:
+            self.reloj.tick(FPS)
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     return True
             self.pintar_fondo()
+            self.jugador.update()
+            self.pantalla.blit(self.jugador.image, self.jugador.rect)
             pg.display.flip()
 
     def pintar_fondo(self):
