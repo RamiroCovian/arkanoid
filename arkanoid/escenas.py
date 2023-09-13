@@ -1,7 +1,7 @@
 import os
 import pygame as pg
 from . import ANCHO, ALTO, LOGO_PATH, FPS
-from .entidades import Raqueta
+from .entidades import Raqueta, Pelota
 
 
 class Escena:
@@ -63,6 +63,7 @@ class Partida(Escena):
         path_fondo = os.path.join("resources", "images", "background.jpg")
         self.fondo = pg.image.load(path_fondo)
         self.jugador = Raqueta()
+        self.pelota = Pelota()
 
     def bucle_principal(self):
         super().bucle_principal()
@@ -75,6 +76,8 @@ class Partida(Escena):
             self.pintar_fondo()
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
+            self.pelota.update()
+            self.pantalla.blit(self.pelota.image, self.pelota.rect)
             pg.display.flip()
 
     def pintar_fondo(self):

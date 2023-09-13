@@ -47,5 +47,45 @@ class Raqueta(Sprite):
             self.rect.left = 0
 
 
-class Pelota:
-    pass
+class Pelota(Sprite):
+    """
+    - [x] 1. Debe ser de tipo Sprite
+    2. Se debe mover (Metodo)
+    - [x] 2.1. Debe rebotar con el jugador
+        2.2. Debe rebotar contra los laterales
+        2.3. Debe rebotar contra ladrillos
+        2.4. Al tocar el borde inferior de la pantalla debe hacer perder una vida al jugador o finalizar partida
+    - [x] 3. Se debe pintar (Metodo)
+    - [x] 4. Posicion inicial
+    - [x] 5. Velocidad
+    """
+
+    velocidad_y = 5
+    velocidad_x = 5
+
+    def __init__(self):
+        super().__init__()
+        self.imagenes = []
+        for i in range(1, 6):
+            path_pelota = os.path.join("resources", "images", f"ball{i}.png")
+            self.imagenes.append(image.load(path_pelota))
+        self.contador_p = 0
+        self.image = self.imagenes[self.contador_p]
+        self.rect = self.image.get_rect(midbottom=((ANCHO / 2), (ALTO / 2)))
+
+    def update(self):
+        self.image = self.imagenes[self.contador_p]
+        self.rect.x += self.velocidad_x
+        self.rect.y -= self.velocidad_y
+        if self.rect.y <= 0:
+            self.rect.y = 0
+            self.velocidad_y = -self.velocidad_y
+        if self.rect.y >= ALTO - self.image.get_height():
+            self.rect.y = ALTO - self.image.get_height()
+            self.velocidad_y = -self.velocidad_y
+        if self.rect.x <= 0:
+            self.rect.x = 0
+            self.velocidad_x = -self.velocidad_x
+        if self.rect.x >= ANCHO - self.image.get_width():
+            self.rect.x = ANCHO - self.image.get_width()
+            self.velocidad_x = -self.velocidad_x
