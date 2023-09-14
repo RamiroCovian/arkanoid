@@ -92,7 +92,16 @@ class Pelota(Sprite):
             self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
         else:
             self.rect.x += self.vel_x
+            if self.rect.left <= 0 or self.rect.right > ANCHO:
+                self.vel_x = -self.vel_x
+
             self.rect.y += self.vel_y
+            if self.rect.top <= 0:
+                self.vel_y = -self.vel_y
+
+            if self.rect.top >= ALTO:
+                self.pierdes()
+                self.reset()
 
         # Animo pelota para los rebotes
         # self.contador_p += self.control_animacion
@@ -101,21 +110,6 @@ class Pelota(Sprite):
         # if self.contador_p in (0, 4):
         #     self.control_animacion = -self.control_animacion
 
-        self.image = self.imagenes[self.contador_p]
-        self.rect.x += self.velocidad_x
-        self.rect.y += self.velocidad_y
-        if self.rect.x <= 0:
-            self.rect.x = 0
-            self.velocidad_x = -self.velocidad_x
-        if self.rect.x >= ANCHO - self.image.get_width():
-            self.rect.x = ANCHO - self.image.get_width()
-            self.velocidad_x = -self.velocidad_x
-
-        # Lo establezco para contener la pelota en la pantalla, luego debo sacar
-        if self.rect.y <= 0:  # En caso que rebote en un ladrillo (escenas.py)
-            self.rect.y = 0
-            self.velocidad_y = -self.velocidad_y
-
     def comprobar_descontar_punto(self):
         if self.rect.y >= ALTO - self.image.get_height():
             self.rect.y = ALTO - self.image.get_height()
@@ -123,6 +117,12 @@ class Pelota(Sprite):
             self.velocidad_y = 0
             return 1  # Si toca parte inferior de la pantalla, devuelve 1 para descontar punto en marcador
         return 0
+
+    def pierdes(self):
+        pass
+
+    def reset():
+        pass
 
 
 class Ladrillo(Sprite):
