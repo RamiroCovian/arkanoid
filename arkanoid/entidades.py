@@ -58,11 +58,14 @@ class Pelota(Sprite):
         2.4. Al tocar el borde inferior de la pantalla debe hacer perder una vida al jugador
             o finalizar partida (Se debe realizar en escenas.py)
     - [x] 3. Se debe pintar (Metodo)
-    - [x] 4. Posicion inicial
+    - [x] 4. Posicion inicial (encima de la Raqueta)
     - [x] 5. Velocidad
     """
 
-    def __init__(self):
+    vel_x = -10
+    vel_y = -13
+
+    def __init__(self, raqueta):
         super().__init__()
         self.imagenes = []
         for i in range(1, 6):
@@ -70,7 +73,9 @@ class Pelota(Sprite):
             self.imagenes.append(image.load(path_pelota))
         self.contador_p = 0
         self.image = self.imagenes[self.contador_p]
-        self.rect = self.image.get_rect(midbottom=((ANCHO / 2), (ALTO / 2)))
+
+        self.raqueta = raqueta
+        self.rect = self.image.get_rect(midbottom=raqueta.rect.midtop)
 
         self.vel_pelota = 5
         self.velocidad_y = 0
@@ -82,7 +87,13 @@ class Pelota(Sprite):
 
         # self.control_animacion = 1
 
-    def update(self):
+    def update(self, partida_empezada):
+        if not partida_empezada:
+            self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
+        else:
+            self.rect.x += self.vel_x
+            self.rect.y += self.vel_y
+
         # Animo pelota para los rebotes
         # self.contador_p += self.control_animacion
         # if self.contador_p == 4 or self.contador_p == 0:
@@ -92,7 +103,7 @@ class Pelota(Sprite):
 
         self.image = self.imagenes[self.contador_p]
         self.rect.x += self.velocidad_x
-        self.rect.y -= self.velocidad_y
+        self.rect.y += self.velocidad_y
         if self.rect.x <= 0:
             self.rect.x = 0
             self.velocidad_x = -self.velocidad_x

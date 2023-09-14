@@ -1,7 +1,7 @@
 import os
 import pygame as pg
 from . import ANCHO, ALTO, FPS, LOGO_PATH
-from .entidades import Ladrillo, Raqueta, Pelota
+from .entidades import Ladrillo, Pelota, Raqueta
 
 
 class Escena:
@@ -63,25 +63,30 @@ class Partida(Escena):
         path_fondo = os.path.join("resources", "images", "background.jpg")
         self.fondo = pg.image.load(path_fondo)
         self.jugador = Raqueta()
-        self.pelota = Pelota()
+        self.pelota = Pelota(self.jugador)
         self.muro = pg.sprite.Group()
 
     def bucle_principal(self):
         super().bucle_principal()
-        print(f"Tengo {len(self.muro)} ladrillos (1)")
         self.crear_muro()
         salir = False
-        print(f"Tengo {len(self.muro)} ladrillos (2)")
+        juego_iniciado = False
         while not salir:
             self.reloj.tick(FPS)
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     return True
+                if evento.type == pg.KEYDOWN and evento.key == pg.K_SPACE:
+                    juego_iniciado = True
+
             self.pintar_fondo()
+
             self.jugador.update()
-            self.pelota.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
+
+            self.pelota.update(juego_iniciado)
             self.pantalla.blit(self.pelota.image, self.pelota.rect)
+
             self.muro.draw(
                 self.pantalla
             )  # draw: Para pintar todos los sprites que hay dentro del grupo
@@ -107,7 +112,10 @@ class Partida(Escena):
         columnas = 6
         margen_superior = 20
 
-        contador = 1
+        # Otra alternativa
+        # ladrillo_med = Ladrillo()
+        # margen_izquierdo = (ANCHO - columnas * ladrillo_med.rect.width) / 2
+
         for fila in range(filas):  # 0-3
             for col in range(columnas):
                 # x = ancho_lad * col
