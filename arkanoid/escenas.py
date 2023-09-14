@@ -1,7 +1,7 @@
 import os
 import pygame as pg
-from . import ANCHO, ALTO, LOGO_PATH, FPS
-from .entidades import Raqueta, Pelota
+from . import ANCHO, ALTO, FPS, LOGO_PATH
+from .entidades import Ladrillo, Raqueta, Pelota
 
 
 class Escena:
@@ -64,10 +64,14 @@ class Partida(Escena):
         self.fondo = pg.image.load(path_fondo)
         self.jugador = Raqueta()
         self.pelota = Pelota()
+        self.muro = []
 
     def bucle_principal(self):
         super().bucle_principal()
+        print(f"Tengo {len(self.muro)} ladrillos (1)")
+        self.crear_muro()
         salir = False
+        print(f"Tengo {len(self.muro)} ladrillos (2)")
         while not salir:
             self.reloj.tick(FPS)
             for evento in pg.event.get():
@@ -93,6 +97,18 @@ class Partida(Escena):
         self.pantalla.blit(self.fondo, (600, 0))
         self.pantalla.blit(self.fondo, (0, 800))
         self.pantalla.blit(self.fondo, (600, 800))
+
+    def crear_muro(self):
+        filas = 4
+        columnas = 6
+
+        contador = 1
+        for fila in range(filas):  # 0-3
+            for col in range(columnas):
+                # Por aqui voy a pasar filas*columnas=24
+                ladrillo = Ladrillo()
+                self.muro.append(ladrillo)
+                print(contador, ladrillo)
 
 
 class MejoresJugadores(Escena):

@@ -40,12 +40,12 @@ class Raqueta(Sprite):
         estado_teclas = key.get_pressed()
         if estado_teclas[K_LEFT]:
             self.rect.x -= self.velocidad
+        if self.rect.left < 0:
+            self.rect.left = 0
         if estado_teclas[K_RIGHT]:
             self.rect.x += self.velocidad
         if self.rect.right > ANCHO:
             self.rect.right = ANCHO
-        if self.rect.left < 0:
-            self.rect.left = 0
 
 
 class Pelota(Sprite):
@@ -62,8 +62,9 @@ class Pelota(Sprite):
     - [x] 5. Velocidad
     """
 
-    velocidad_y = 5
-    velocidad_x = 5
+    vel_pelota = 5
+    velocidad_y = randint(-vel_pelota, vel_pelota)
+    velocidad_x = randint(-vel_pelota, vel_pelota)
     control_animacion = 1
 
     def __init__(self):
@@ -80,7 +81,10 @@ class Pelota(Sprite):
         # Animo pelota para los rebotes
         # self.contador_p += self.control_animacion
         # if self.contador_p == 4 or self.contador_p == 0:
+        # Otra alternativa
+        # if self.contador_p in (0, 4):
         #     self.control_animacion = -self.control_animacion
+
         self.image = self.imagenes[self.contador_p]
         self.rect.x += self.velocidad_x
         self.rect.y -= self.velocidad_y
@@ -103,6 +107,14 @@ class Pelota(Sprite):
             self.velocidad_y = 0
             return 1  # Si toca parte inferior de la pantalla, devuelve 1 para descontar punto en marcador
         return 0
+
+
+class Ladrillo(Sprite):
+    def __init__(self):
+        super().__init__()
+        path_verde = os.path.join("resources", "images", "greenTile.png")
+        self.image = image.load(path_verde)
+        self.rect = self.image.get_rect()
 
 
 class Marcador:
