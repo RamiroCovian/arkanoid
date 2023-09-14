@@ -64,7 +64,7 @@ class Partida(Escena):
         self.fondo = pg.image.load(path_fondo)
         self.jugador = Raqueta()
         self.pelota = Pelota()
-        self.muro = []
+        self.muro = pg.sprite.Group()
 
     def bucle_principal(self):
         super().bucle_principal()
@@ -82,6 +82,10 @@ class Partida(Escena):
             self.pelota.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
             self.pantalla.blit(self.pelota.image, self.pelota.rect)
+            self.muro.draw(
+                self.pantalla
+            )  # draw: Para pintar todos los sprites que hay dentro del grupo
+
             hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
             if hay_punto > 0:
                 # Debe descontar de Vidas en Marcador
@@ -101,14 +105,19 @@ class Partida(Escena):
     def crear_muro(self):
         filas = 4
         columnas = 6
+        margen_superior = 20
 
         contador = 1
         for fila in range(filas):  # 0-3
             for col in range(columnas):
+                # x = ancho_lad * col
+                # y = alto_lad * fila
                 # Por aqui voy a pasar filas*columnas=24
                 ladrillo = Ladrillo()
-                self.muro.append(ladrillo)
-                print(contador, ladrillo)
+                margen_izquierdo = (ANCHO - columnas * ladrillo.rect.width) / 2
+                ladrillo.rect.x = ladrillo.rect.width * col + margen_izquierdo
+                ladrillo.rect.y = ladrillo.rect.height * fila + margen_superior
+                self.muro.add(ladrillo)  # add: para agregar los ladrillos al grupo muro
 
 
 class MejoresJugadores(Escena):

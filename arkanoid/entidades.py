@@ -62,11 +62,6 @@ class Pelota(Sprite):
     - [x] 5. Velocidad
     """
 
-    vel_pelota = 5
-    velocidad_y = randint(-vel_pelota, vel_pelota)
-    velocidad_x = randint(-vel_pelota, vel_pelota)
-    control_animacion = 1
-
     def __init__(self):
         super().__init__()
         self.imagenes = []
@@ -76,6 +71,16 @@ class Pelota(Sprite):
         self.contador_p = 0
         self.image = self.imagenes[self.contador_p]
         self.rect = self.image.get_rect(midbottom=((ANCHO / 2), (ALTO / 2)))
+
+        self.vel_pelota = 5
+        self.velocidad_y = 0
+        while self.velocidad_y == 0:
+            self.velocidad_y = randint(-self.vel_pelota, self.vel_pelota)
+        self.velocidad_x = 0
+        while self.velocidad_x == 0:
+            self.velocidad_x = randint(-self.vel_pelota, self.vel_pelota)
+
+        # self.control_animacion = 1
 
     def update(self):
         # Animo pelota para los rebotes
