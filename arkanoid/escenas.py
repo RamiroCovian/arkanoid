@@ -75,12 +75,12 @@ class Partida(Escena):
                     return True
             self.pintar_fondo()
             self.jugador.update()
-            self.pantalla.blit(self.jugador.image, self.jugador.rect)
             self.pelota.update()
+            self.pantalla.blit(self.jugador.image, self.jugador.rect)
             self.pantalla.blit(self.pelota.image, self.pelota.rect)
             hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
             if hay_punto > 0:
-                # Debe descontar de Lives
+                # Debe descontar de Vidas en Marcador
                 print("Pierde vida")
                 return True
 
