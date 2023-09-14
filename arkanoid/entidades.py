@@ -62,8 +62,9 @@ class Pelota(Sprite):
     - [x] 5. Velocidad
     """
 
-    velocidad_y = randint(-5, 5)
-    velocidad_x = randint(-5, 5)
+    velocidad_y = 5
+    velocidad_x = 5
+    control_animacion = 1
 
     def __init__(self):
         super().__init__()
@@ -76,6 +77,10 @@ class Pelota(Sprite):
         self.rect = self.image.get_rect(midbottom=((ANCHO / 2), (ALTO / 2)))
 
     def update(self):
+        # Animo pelota para los rebotes
+        # self.contador_p += self.control_animacion
+        # if self.contador_p == 4 or self.contador_p == 0:
+        #     self.control_animacion = -self.control_animacion
         self.image = self.imagenes[self.contador_p]
         self.rect.x += self.velocidad_x
         self.rect.y -= self.velocidad_y
@@ -90,11 +95,6 @@ class Pelota(Sprite):
         if self.rect.y <= 0:  # En caso que rebote en un ladrillo (escenas.py)
             self.rect.y = 0
             self.velocidad_y = -self.velocidad_y
-        # if (
-        #     self.rect.y >= ALTO - self.image.get_height()
-        # ):  # En caso de tocar el borde inferior, descontar punto (escenas.py)
-        #     self.rect.y = ALTO - self.image.get_height()
-        #     self.velocidad_y = -self.velocidad_y
 
     def comprobar_descontar_punto(self):
         if self.rect.y >= ALTO - self.image.get_height():
