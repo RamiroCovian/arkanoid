@@ -1,8 +1,9 @@
 import os
 from random import randint
+import pygame as pg
 from pygame.sprite import Sprite
 from pygame import image, key, K_LEFT, K_RIGHT
-from . import ANCHO, ALTO
+from . import ANCHO, ALTO, VEL_MAX, VEL_MIN_Y
 
 
 class Raqueta(Sprite):
@@ -62,9 +63,6 @@ class Pelota(Sprite):
     - [x] 5. Velocidad
     """
 
-    vel_x = -10
-    vel_y = -13
-
     def __init__(self, raqueta):
         super().__init__()
         self.imagenes = []
@@ -76,14 +74,11 @@ class Pelota(Sprite):
 
         self.raqueta = raqueta
         self.rect = self.image.get_rect(midbottom=raqueta.rect.midtop)
+        self.inicializar_velocidades()
 
-        self.vel_pelota = 5
-        self.velocidad_y = 0
-        while self.velocidad_y == 0:
-            self.velocidad_y = randint(-self.vel_pelota, self.vel_pelota)
-        self.velocidad_x = 0
-        while self.velocidad_x == 0:
-            self.velocidad_x = randint(-self.vel_pelota, self.vel_pelota)
+    def inicializar_velocidades(self):
+        self.vel_x = randint(-VEL_MAX, VEL_MAX)
+        self.vel_y = randint(-VEL_MAX, -VEL_MIN_Y)
 
         # self.control_animacion = 1
 
@@ -103,26 +98,40 @@ class Pelota(Sprite):
                 self.pierdes()
                 self.reset()
 
-        # Animo pelota para los rebotes
-        # self.contador_p += self.control_animacion
-        # if self.contador_p == 4 or self.contador_p == 0:
-        # Otra alternativa
-        # if self.contador_p in (0, 4):
-        #     self.control_animacion = -self.control_animacion
+            self.comprobar_rebote_pala()
 
-    def comprobar_descontar_punto(self):
-        if self.rect.y >= ALTO - self.image.get_height():
-            self.rect.y = ALTO - self.image.get_height()
-            self.velocidad_x = 0
-            self.velocidad_y = 0
-            return 1  # Si toca parte inferior de la pantalla, devuelve 1 para descontar punto en marcador
-        return 0
+        """
+        # Animo pelota para los rebotes
+        self.contador_p += self.control_animacion
+        if self.contador_p == 4 or self.contador_p == 0:
+        Otra alternativa
+        if self.contador_p in (0, 4):
+            self.control_animacion = -self.control_animacion
+        """
+
+    # def comprobar_descontar_punto(self):
+    #     if self.rect.y >= ALTO - self.image.get_height():
+    #         self.rect.y = ALTO - self.image.get_height()
+    #         self.velocidad_x = 0
+    #         self.velocidad_y = 0
+    #         return 1  # Si toca parte inferior de la pantalla, devuelve 1 para descontar punto en marcador
+    #     return 0
+
+    def comprobar_rebote_pala(self):
+        if pg.sprite.collide_mask(self, self.raqueta):
+            self.inicializar_velocidades()
 
     def pierdes(self):
-        pass
+        # TODO: implementar acciones para cuando el jugador pierde la partida
+        print("Has perdido un punto")
+        return 1
 
-    def reset():
-        pass
+    def reset(self):
+        # TODO: implementar acciones para el reset de la pelota
+        self.vel_x = -10
+        self.vel_y = -13
+        self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
+        return True
 
 
 class Ladrillo(Sprite):

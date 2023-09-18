@@ -71,6 +71,7 @@ class Partida(Escena):
         self.crear_muro()
         salir = False
         juego_iniciado = False
+
         while not salir:
             self.reloj.tick(FPS)
             for evento in pg.event.get():
@@ -91,11 +92,11 @@ class Partida(Escena):
                 self.pantalla
             )  # draw: Para pintar todos los sprites que hay dentro del grupo
 
-            hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
-            if hay_punto > 0:
-                # Debe descontar de Vidas en Marcador
-                print("Pierde vida")
-                return True
+            # hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
+            # if hay_punto > 0:
+            #     # Debe descontar de Vidas en Marcador
+            #     print("Pierde vida")
+            #     return True
 
             pg.display.flip()
 

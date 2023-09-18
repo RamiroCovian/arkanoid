@@ -15,6 +15,7 @@ class Arkanoid:
         self.escenas = [portada, partida, mejores_jugadores]
 
     def jugar(self):
+        # FIXME: evitar que el programa se cierre despues de la pantalla de mejores jugadores
         for escena in self.escenas:
             he_acabado = escena.bucle_principal()
             if he_acabado:
