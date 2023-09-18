@@ -92,6 +92,17 @@ class Partida(Escena):
                 self.pantalla
             )  # draw: Para pintar todos los sprites que hay dentro del grupo
 
+            golpeados = pg.sprite.spritecollide(self.pelota, self.muro, True)
+            if len(golpeados) > 0:
+                for ladrillo in golpeados:
+                    print(
+                        "Golpeado el ladrillo en la posicion",
+                        ladrillo.rect.center,
+                        "pelota en pos:",
+                        self.pelota.rect.center,
+                    )
+                self.pelota.vel_y = -self.pelota.vel_y
+
             # hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
             # if hay_punto > 0:
             #     # Debe descontar de Vidas en Marcador
