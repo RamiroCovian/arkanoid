@@ -3,7 +3,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 from pygame import image, key, K_LEFT, K_RIGHT
-from . import ANCHO, ALTO, VEL_MAX, VEL_MIN_Y
+from . import ANCHO, ALTO, VEL_MAX, VEL_MIN_Y, VIDAS
 
 
 class Raqueta(Sprite):
@@ -75,10 +75,11 @@ class Pelota(Sprite):
         self.raqueta = raqueta
         self.rect = self.image.get_rect(midbottom=raqueta.rect.midtop)
         self.inicializar_velocidades()
+        self.vidas = VIDAS
 
     def inicializar_velocidades(self):
         self.vel_x = randint(-VEL_MAX, VEL_MAX)
-        self.vel_y = randint(-VEL_MAX, -VEL_MIN_Y)
+        self.vel_y = randint(-VEL_MAX, VEL_MIN_Y)
 
         # self.control_animacion = 1
 
@@ -95,10 +96,10 @@ class Pelota(Sprite):
                 self.vel_y = -self.vel_y
 
             if self.rect.top >= ALTO:
-                self.pierdes()
-                self.reset()
+                return False, self.pierdes()
 
             self.comprobar_rebote_pala()
+        return True, False
 
         """
         # Animo pelota para los rebotes
@@ -109,37 +110,40 @@ class Pelota(Sprite):
             self.control_animacion = -self.control_animacion
         """
 
-    # def comprobar_descontar_punto(self):
-    #     if self.rect.y >= ALTO - self.image.get_height():
-    #         self.rect.y = ALTO - self.image.get_height()
-    #         self.velocidad_x = 0
-    #         self.velocidad_y = 0
-    #         return 1  # Si toca parte inferior de la pantalla, devuelve 1 para descontar punto en marcador
-    #     return 0
-
     def comprobar_rebote_pala(self):
         if pg.sprite.collide_mask(self, self.raqueta):
             self.inicializar_velocidades()
 
     def pierdes(self):
         # TODO: implementar acciones para cuando el jugador pierde la partida
-        print("Has perdido un punto")
-        return 1
-
-    def reset(self):
-        # TODO: implementar acciones para el reset de la pelota
-        self.vel_x = -10
-        self.vel_y = -13
-        self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
-        return True
+        self.vidas -= 1
+        self.inicializar_velocidades()
+        print("Has perdido una vida, te quedan", self.vidas)
+        return self.vidas < 0
 
 
 class Ladrillo(Sprite):
-    def __init__(self):
+    VERDE = 0
+    ROJO = 1
+    ROJO_ROTO = 2
+    IMG_LADRILLO = ["greenTile.png", "redTile.png", "redTileBreak.png"]
+
+    def __init__(self, color=VERDE):
         super().__init__()
-        path_verde = os.path.join("resources", "images", "greenTile.png")
-        self.image = image.load(path_verde)
+        self.tipo = color
+        self.imagenes = []
+        for img in self.IMG_LADRILLO:
+            ruta = os.path.join("resources", "images", img)
+            self.imagenes.append(pg.image.load(ruta))
+        self.image = self.imagenes[color]
         self.rect = self.image.get_rect()
+
+    def update(self, muro):
+        if self.tipo == Ladrillo.ROJO:
+            self.tipo = Ladrillo.ROJO_ROTO
+        else:
+            muro.remove(self)
+        self.image = self.imagenes[self.tipo]
 
 
 class Marcador:

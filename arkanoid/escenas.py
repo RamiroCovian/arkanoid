@@ -85,22 +85,18 @@ class Partida(Escena):
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
-            self.pelota.update(juego_iniciado)
+            juego_iniciado, salir = self.pelota.update(juego_iniciado)
             self.pantalla.blit(self.pelota.image, self.pelota.rect)
 
             self.muro.draw(
                 self.pantalla
             )  # draw: Para pintar todos los sprites que hay dentro del grupo
 
-            golpeados = pg.sprite.spritecollide(self.pelota, self.muro, True)
+            golpeados = pg.sprite.spritecollide(self.pelota, self.muro, False)
             if len(golpeados) > 0:
                 for ladrillo in golpeados:
-                    print(
-                        "Golpeado el ladrillo en la posicion",
-                        ladrillo.rect.center,
-                        "pelota en pos:",
-                        self.pelota.rect.center,
-                    )
+                    ladrillo.update(self.muro)
+
                 self.pelota.vel_y = -self.pelota.vel_y
 
             # hay_punto = self.pelota.comprobar_descontar_punto()  # Devuelve 0, 1
@@ -121,8 +117,9 @@ class Partida(Escena):
 
     def crear_muro(self):
         filas = 4
-        columnas = 6
+        columnas = 5
         margen_superior = 20
+        tipo = None
 
         # Otra alternativa
         # ladrillo_med = Ladrillo()
@@ -133,7 +130,11 @@ class Partida(Escena):
                 # x = ancho_lad * col
                 # y = alto_lad * fila
                 # Por aqui voy a pasar filas*columnas=24
-                ladrillo = Ladrillo()
+                if tipo == Ladrillo.ROJO:
+                    tipo = Ladrillo.VERDE
+                else:
+                    tipo = Ladrillo.ROJO
+                ladrillo = Ladrillo(tipo)
                 margen_izquierdo = (ANCHO - columnas * ladrillo.rect.width) / 2
                 ladrillo.rect.x = ladrillo.rect.width * col + margen_izquierdo
                 ladrillo.rect.y = ladrillo.rect.height * fila + margen_superior
