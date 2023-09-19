@@ -86,6 +86,7 @@ class Pelota(Sprite):
     def update(self, partida_empezada):
         if not partida_empezada:
             self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
+            # return False, False
         else:
             self.rect.x += self.vel_x
             if self.rect.left <= 0 or self.rect.right > ANCHO:
@@ -99,7 +100,8 @@ class Pelota(Sprite):
                 return False, self.pierdes()
 
             self.comprobar_rebote_pala()
-        return True, False
+            # return True, False
+        return partida_empezada, False
 
         """
         # Animo pelota para los rebotes
