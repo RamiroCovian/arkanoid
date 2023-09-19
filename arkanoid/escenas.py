@@ -123,8 +123,8 @@ class Partida(Escena):
         self.pantalla.blit(self.fondo, (600, 800))
 
     def crear_muro(self):
-        filas = 4
-        columnas = 5
+        filas = 10
+        columnas = 7
         margen_superior = 20
         tipo = None
 
@@ -141,11 +141,14 @@ class Partida(Escena):
                     tipo = Ladrillo.VERDE
                 else:
                     tipo = Ladrillo.ROJO
-                ladrillo = Ladrillo(tipo)
+                puntos = (tipo + 1) * (10 - fila)
+                ladrillo = Ladrillo(puntos, tipo)
                 margen_izquierdo = (ANCHO - columnas * ladrillo.rect.width) / 2
                 ladrillo.rect.x = ladrillo.rect.width * col + margen_izquierdo
                 ladrillo.rect.y = ladrillo.rect.height * fila + margen_superior
                 self.muro.add(ladrillo)  # add: para agregar los ladrillos al grupo muro
+
+                print(tipo, fila, col, puntos)
 
 
 class MejoresJugadores(Escena):

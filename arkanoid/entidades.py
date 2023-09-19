@@ -122,7 +122,7 @@ class Ladrillo(Sprite):
     ROJO_ROTO = 2
     IMG_LADRILLO = ["greenTile.png", "redTile.png", "redTileBreak.png"]
 
-    def __init__(self, color=VERDE):
+    def __init__(self, puntos, color=VERDE):
         super().__init__()
         self.tipo = color
         self.imagenes = []
@@ -131,6 +131,7 @@ class Ladrillo(Sprite):
             self.imagenes.append(pg.image.load(ruta))
         self.image = self.imagenes[color]
         self.rect = self.image.get_rect()
+        self.puntos = (color + 1) * 10
 
     def update(self, muro):
         if self.tipo == Ladrillo.ROJO:
