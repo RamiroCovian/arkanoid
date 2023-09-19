@@ -3,7 +3,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 from pygame import image, key, K_LEFT, K_RIGHT
-from . import ANCHO, ALTO, VEL_MAX, VEL_MIN_Y, VIDAS
+from . import ALTO_MARCADOR, ANCHO, ALTO, VEL_MAX, VEL_MIN_Y, VIDAS
 
 
 class Raqueta(Sprite):
@@ -134,15 +134,39 @@ class Ladrillo(Sprite):
         self.puntos = (color + 1) * 10
 
     def update(self, muro):
+        """
+        Segun el tipo de ladrillo, se fragmenta en el primer golpe o se elimina directamente.
+        Devuelve True si el ladrillo se ha eliminado del muro
+        Devuelve False en caso contrario.
+        """
         if self.tipo == Ladrillo.ROJO:
             self.tipo = Ladrillo.ROJO_ROTO
+            self.image = self.imagenes[self.tipo]
+            return False
         else:
             muro.remove(self)
-        self.image = self.imagenes[self.tipo]
+            return True
 
 
 class Marcador:
-    pass
+    def __init__(self):
+        self.valor = 0
+        fuente = os.path.join(
+            "resources", "fonts", "LibreFranklin-VariableFont_wght.ttf"
+        )
+        self.tipo_letra = pg.font.Font(fuente, 35)
+
+    def aumentar_marcador(self, incremento):
+        self.valor += incremento
+
+    def pintar(self, pantalla):
+        r = pg.rect.Rect(0, 0, ANCHO, ALTO_MARCADOR)
+        pg.draw.rect(pantalla, (0, 0, 0), r)
+        cadena = f"{self.valor}"
+        texto = self.tipo_letra.render(cadena, True, (230, 189, 55))
+        pos_x = 20
+        pos_y = 10
+        pantalla.blit(texto, (pos_x, pos_y))
 
 
 class ContadorVidas:
@@ -154,4 +178,5 @@ class ContadorVidas:
         return self.vidas < 0
 
     def pintar(self):
+        # TODO: acciones para pintar el contador en pantalla
         pass

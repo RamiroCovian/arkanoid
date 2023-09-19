@@ -10,3 +10,4 @@ VEL_MIN_Y = -5
 LOGO_PATH = os.path.join("resources", "images", "arkanoid_name.png")
 
 VIDAS = 3
+ALTO_MARCADOR = 50

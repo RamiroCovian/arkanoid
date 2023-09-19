@@ -1,7 +1,7 @@
 import os
 import pygame as pg
 from . import ANCHO, ALTO, FPS, LOGO_PATH, VIDAS
-from .entidades import Ladrillo, Pelota, Raqueta, ContadorVidas
+from .entidades import ContadorVidas, Ladrillo, Marcador, Pelota, Raqueta
 
 
 class Escena:
@@ -66,6 +66,7 @@ class Partida(Escena):
         self.pelota = Pelota(self.jugador)
         self.muro = pg.sprite.Group()
         self.contador_vidas = ContadorVidas(VIDAS)
+        self.marcador = Marcador()
 
     def bucle_principal(self):
         super().bucle_principal()
@@ -96,7 +97,10 @@ class Partida(Escena):
             golpeados = pg.sprite.spritecollide(self.pelota, self.muro, False)
             if len(golpeados) > 0:
                 for ladrillo in golpeados:
-                    ladrillo.update(self.muro)
+                    # eliminado = ladrillo.update(muro)
+                    # if eliminado:
+                    if ladrillo.update(self.muro):
+                        self.marcador.aumentar_marcador(ladrillo.puntos)
 
                 self.pelota.vel_y = -self.pelota.vel_y
 
@@ -106,6 +110,7 @@ class Partida(Escena):
             #     print("Pierde vida")
             #     return True
 
+            self.marcador.pintar(self.pantalla)
             pg.display.flip()
 
             if self.pelota.he_perdido:
@@ -125,7 +130,7 @@ class Partida(Escena):
     def crear_muro(self):
         filas = 10
         columnas = 7
-        margen_superior = 20
+        margen_superior = 60
         tipo = None
 
         # Otra alternativa
