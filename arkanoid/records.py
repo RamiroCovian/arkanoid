@@ -1,3 +1,4 @@
+import csv
 import os
 
 MAX_RECORDS = 10
@@ -29,7 +30,12 @@ class Records:
         pass
 
     def guardar(self):
-        pass
+        # lector = open(self.file_path, mode= "w")
+        # lector.close()
+        with open(self.file_path, mode="w") as records_file:
+            writer = csv.writer(records_file)
+            writer.writerow(("Nombre", "Puntos"))
+            writer.writerows(self.game_records)
 
     def cargar(self):
         pass
