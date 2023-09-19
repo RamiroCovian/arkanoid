@@ -1,7 +1,7 @@
 import os
 import pygame as pg
-from . import ANCHO, ALTO, FPS, LOGO_PATH
-from .entidades import Ladrillo, Pelota, Raqueta
+from . import ANCHO, ALTO, FPS, LOGO_PATH, VIDAS
+from .entidades import Ladrillo, Pelota, Raqueta, ContadorVidas
 
 
 class Escena:
@@ -65,6 +65,7 @@ class Partida(Escena):
         self.jugador = Raqueta()
         self.pelota = Pelota(self.jugador)
         self.muro = pg.sprite.Group()
+        self.contador_vidas = ContadorVidas(VIDAS)
 
     def bucle_principal(self):
         super().bucle_principal()
@@ -85,7 +86,7 @@ class Partida(Escena):
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
-            juego_iniciado, salir = self.pelota.update(juego_iniciado)
+            self.pelota.update(juego_iniciado)
             self.pantalla.blit(self.pelota.image, self.pelota.rect)
 
             self.muro.draw(
@@ -106,6 +107,12 @@ class Partida(Escena):
             #     return True
 
             pg.display.flip()
+
+            if self.pelota.he_perdido:
+                # acciones cada vez que puerdo una vida
+                salir = self.contador_vidas.perder_vida()
+                self.pelota.he_perdido = False
+                juego_iniciado = False
 
     def pintar_fondo(self):
         # TODO: mejorar la logica para "rellenar" el fondo.

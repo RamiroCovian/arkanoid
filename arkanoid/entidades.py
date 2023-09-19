@@ -75,7 +75,7 @@ class Pelota(Sprite):
         self.raqueta = raqueta
         self.rect = self.image.get_rect(midbottom=raqueta.rect.midtop)
         self.inicializar_velocidades()
-        self.vidas = VIDAS
+        self.he_perdido = False
 
     def inicializar_velocidades(self):
         self.vel_x = randint(-VEL_MAX, VEL_MAX)
@@ -83,8 +83,8 @@ class Pelota(Sprite):
 
         # self.control_animacion = 1
 
-    def update(self, partida_empezada):
-        if not partida_empezada:
+    def update(self, se_mueve_la_pelota):
+        if not se_mueve_la_pelota:
             self.rect = self.image.get_rect(midbottom=self.raqueta.rect.midtop)
             # return False, False
         else:
@@ -97,11 +97,10 @@ class Pelota(Sprite):
                 self.vel_y = -self.vel_y
 
             if self.rect.top >= ALTO:
-                return False, self.pierdes()
+                self.inicializar_velocidades()
+                self.he_perdido = True
 
             self.comprobar_rebote_pala()
-            # return True, False
-        return partida_empezada, False
 
         """
         # Animo pelota para los rebotes
@@ -115,13 +114,6 @@ class Pelota(Sprite):
     def comprobar_rebote_pala(self):
         if pg.sprite.collide_mask(self, self.raqueta):
             self.inicializar_velocidades()
-
-    def pierdes(self):
-        # TODO: implementar acciones para cuando el jugador pierde la partida
-        self.vidas -= 1
-        self.inicializar_velocidades()
-        print("Has perdido una vida, te quedan", self.vidas)
-        return self.vidas < 0
 
 
 class Ladrillo(Sprite):
@@ -150,3 +142,15 @@ class Ladrillo(Sprite):
 
 class Marcador:
     pass
+
+
+class ContadorVidas:
+    def __init__(self, vidas_iniciales):
+        self.vidas = vidas_iniciales
+
+    def perder_vida(self):
+        self.vidas -= 1
+        return self.vidas < 0
+
+    def pintar(self):
+        pass
