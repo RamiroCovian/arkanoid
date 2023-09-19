@@ -14,6 +14,7 @@ class Records:
         self.data_path = os.path.join(os.path.dirname(self.file_dir), "data")
         self.file_path = os.path.join(self.data_path, self.filename)
         self.check_records_file()
+        self.cargar()
 
     def check_records_file(self):
         if not os.path.isdir(self.data_path):
@@ -30,11 +31,11 @@ class Records:
         """
         self.game_records.append([nombre, puntuacion])
         self.game_records.sort(key=lambda item: item[1], reverse=True)
-        self.game_records = self.game_records[:10]
+        self.game_records = self.game_records[:MAX_RECORDS]
         self.guardar()
 
     def puntuacion_menor(self):
-        pass
+        return self.game_records[-1]
 
     def guardar(self):
         # lector = open(self.file_path, mode= "w")
@@ -45,7 +46,15 @@ class Records:
             writer.writerows(self.game_records)
 
     def cargar(self):
-        pass
+        with open(self.file_path, mode="r") as records_file:
+            reader = csv.reader(records_file)
+            contador = 0
+            self.game_records = []
+            for linea in reader:
+                contador += 1
+                if contador == 1:
+                    continue
+                self.game_records.append([linea[0], int(linea[1])])
 
     def reset(self):
         """
