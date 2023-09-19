@@ -24,7 +24,14 @@ class Records:
             self.reset()
 
     def insert_record(self, nombre, puntuacion):
-        pass
+        """
+        1. recorrer todo el archivo y ver donde insertarlo
+        2. escribir el archivo
+        """
+        self.game_records.append([nombre, puntuacion])
+        self.game_records.sort(key=lambda item: item[1], reverse=True)
+        self.game_records = self.game_records[:10]
+        self.guardar()
 
     def puntuacion_menor(self):
         pass
