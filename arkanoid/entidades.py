@@ -3,7 +3,7 @@ from random import randint
 import pygame as pg
 from pygame.sprite import Sprite
 from pygame import image, key, K_LEFT, K_RIGHT
-from . import ALTO_MARCADOR, ANCHO, ALTO, VEL_MAX, VEL_MIN_Y, VIDAS
+from . import ALTO, ALTO_MARCADOR, ANCHO, VEL_MAX, VEL_MIN_Y
 
 
 class Raqueta(Sprite):
@@ -93,7 +93,7 @@ class Pelota(Sprite):
                 self.vel_x = -self.vel_x
 
             self.rect.y += self.vel_y
-            if self.rect.top <= 0:
+            if self.rect.top <= ALTO_MARCADOR:
                 self.vel_y = -self.vel_y
 
             if self.rect.top >= ALTO:
